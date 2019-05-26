@@ -13,7 +13,7 @@ resources:
     cpu: 4
     memory: 8Gi
   disk: "50Gi"
-  storageclass: "default"
+  existingClaim: "default"
 
 cleanRun: false
 
@@ -21,11 +21,6 @@ volumeMounts:
 - name: docker-socket
   mountPath: /var/run/docker.sock
   readOnly: false
-
-volumes:
-- name: docker-socket
-  hostPath:
-    path: /var/run/docker.sock
 
 extraEnv: {}
 

@@ -68,7 +68,12 @@ spec:
 {{ toYaml .Values.extraContainers | indent 6 }}
 {{ end }}
       volumes:
-{{ toYaml .Values.volumes | indent 8 }}
+      - name: docker-socket
+        hostPath:
+          path: /var/run/docker.sock
+      - name: workspace
+        persistentVolumeClaim:
+          claimName: {{ .Values.resources.existingClaim | quote }}
 {{ if .Values.image.imagePullSecret }}
       imagePullSecrets:
         - name: {{ .Values.image.imagePullSecret }}
