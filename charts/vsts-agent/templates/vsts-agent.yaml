@@ -68,22 +68,26 @@ spec:
 {{ toYaml .Values.extraContainers | indent 6 }}
 {{ end }}
       volumes:
-      - name: docker-socket
-        hostPath:
-          path: /var/run/docker.sock
+{{ toYaml .Values.volumes | indent 8 }}
       - name: workspace
+      {{- if .Values.persistance.useExistingClaim }}
         persistentVolumeClaim:
           claimName: {{ .Values.resources.existingClaim | quote }}
+      {{- else }}
+        emptyDir: {}
+      {{- end -}}
 {{ if .Values.image.imagePullSecret }}
       imagePullSecrets:
         - name: {{ .Values.image.imagePullSecret }}
 {{ end }}
+{{ if not .Values.persistance.useExistingClaim }}
   volumeClaimTemplates:
   - metadata:
       name: workspace
     spec:
       accessModes: [ ReadWriteOnce ]
-      storageClassName: {{ .Values.resources.storageclass | default "default" | quote }}
+      storageClassName: {{ .Values.persistance.storageclass | default "default" | quote }}
       resources:
         requests:
           storage: {{ .Values.resources.disk | default "50Gi" | quote }}
+{{ end }}
