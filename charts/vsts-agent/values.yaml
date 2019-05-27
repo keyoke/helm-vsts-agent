@@ -14,10 +14,12 @@ resources:
     memory: 8Gi
   disk: "50Gi"
 
-persistance:
+persistence:
   useExistingClaim: false
   existingClaim:
   storageClass: "default"
+  accessMode: ReadWriteOnce
+
 
 cleanRun: false
 
