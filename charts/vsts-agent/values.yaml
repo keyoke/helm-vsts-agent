@@ -13,7 +13,13 @@ resources:
     cpu: 4
     memory: 8Gi
   disk: "50Gi"
-  storageclass: "default"
+
+persistence:
+  useExistingClaim: false
+  existingClaim:
+  storageClass: "default"
+  accessMode: ReadWriteOnce
+
 
 cleanRun: false
 

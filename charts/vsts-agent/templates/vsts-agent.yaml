@@ -69,16 +69,26 @@ spec:
 {{ end }}
       volumes:
 {{ toYaml .Values.volumes | indent 8 }}
+        - name: workspace
+      {{- if .Values.persistence.useExistingClaim }}
+          persistentVolumeClaim:
+            claimName: {{ .Values.persistence.existingClaim | default | quote }}
+      {{- else }}
+          emptyDir: {}
+      {{- end -}}
 {{ if .Values.image.imagePullSecret }}
       imagePullSecrets:
         - name: {{ .Values.image.imagePullSecret }}
 {{ end }}
+{{ if not .Values.persistence.useExistingClaim }}
   volumeClaimTemplates:
   - metadata:
       name: workspace
     spec:
-      accessModes: [ ReadWriteOnce ]
-      storageClassName: {{ .Values.resources.storageclass | default "default" | quote }}
+      accessModes:
+        - {{ .Values.persistence.accessMode }}
+      storageClassName: {{ .Values.persistence.storageClass | default "default" | quote }}
       resources:
         requests:
           storage: {{ .Values.resources.disk | default "50Gi" | quote }}
+{{ end }}
