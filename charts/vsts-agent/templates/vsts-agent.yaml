@@ -6,6 +6,9 @@ metadata:
   labels:
     chart: {{ .Chart.Name }}
     version: {{ .Chart.Version }}
+  {{- if .Values.podidentity.enabled }}
+    aadpodidbinding: {{ .Values.podidentity.name }}
+  {{ end }}
 spec:
   replicas: {{ .Values.replicas }}
   serviceName: {{ .Chart.Name }}

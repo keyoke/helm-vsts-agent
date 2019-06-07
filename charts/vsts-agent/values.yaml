@@ -20,7 +20,10 @@ persistence:
   storageClass: "default"
   accessMode: ReadWriteOnce
 
-
+podidentity:
+  enabled: false
+  name:
+  
 cleanRun: false
 
 volumeMounts:
